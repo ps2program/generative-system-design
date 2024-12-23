@@ -7,7 +7,7 @@ from langchain_core.messages import RemoveMessage
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask import Flask, send_from_directory, jsonify,request
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import requests
 
 import sqlite3
@@ -27,8 +27,8 @@ CORS(app)
 
 # Initialize the default model
 # set_global_model("OLLAMA_MISTRAL")
-# set_global_model("LOCAL")
-set_global_model("LLAMA3")
+set_global_model("LOCAL")
+# set_global_model("LLAMA3")
 # set_global_model("MISTRAL")
 graph = create_question_handling_graph()
 config = {"configurable": {"thread_id": "1"}}
@@ -412,25 +412,24 @@ def get_available_models():
     """
     Endpoint to fetch available models from the external service.
     """
-    url = os.getenv('NETVIBES_API_URL')
-    bearer_token = os.getenv('NETVIBES_BEARER_TOKEN')
-
-    headers = {
-        'accept': 'application/json',
-        'Authorization': f'Bearer {bearer_token}'
-    }
-
     try:
-        # response = ensure_session_id()
-        # if response:
-        #     return response
-    
-        response = requests.get(url, headers=headers)
-        # response.raise_for_status()  # Raise an exception for HTTP errors
-        data = response.json()
-        return jsonify(data)
+        result = {
+            "data": [
+                {
+                "id": "LLAMA-3.2"
+                },
+                {
+                "id": "GPT-4o"
+                },
+                {
+                "id": "Local "
+                }
+            ]
+        }
+
+        return jsonify(result)
     except requests.exceptions.RequestException as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+         return jsonify({"status": "error", "message": str(e)}), 500
 
 # @app.route("/change_model", methods=["POST"])
 # def change_model():

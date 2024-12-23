@@ -172,7 +172,7 @@ function ChatApp({ onMessageSent }) {
       <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-            xSystems AI Engine
+            Generative System Design
           </Typography>
 
           <FormControl sx={{ minWidth: 200, ml: "auto" }}>

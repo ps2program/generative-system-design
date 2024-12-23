@@ -46,7 +46,7 @@ def create_lmstudio_model(self):
         ChatOpenAI: The configured LM Studio model.
     """
     return ChatOpenAI(
-        base_url="http://10.85.86.15:1234/v1", api_key="lm-studio", name="local"
+        base_url="http://127.0.0.1:1234/v1", api_key="lm-studio", name="local"
     )
     
 def create_gpt4o_model(model_name):
@@ -119,7 +119,7 @@ def create_model(model_name):
     elif model_name == "LOCAL":
         return create_lmstudio_model(model_name)
     else:
-        return create_LLAMA3_model("LLAMA3")
+        return create_lmstudio_model(model_name)
 
 def set_global_model(model_name):
     """
