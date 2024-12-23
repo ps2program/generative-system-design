@@ -49,6 +49,19 @@ def create_lmstudio_model(self):
         base_url="http://127.0.0.1:1234/v1", api_key="lm-studio", name="local"
     )
     
+
+def create_lmstudio_model_portforward(self):
+    """
+    Creates and returns a ChatOpenAI model instance for LM Studio.
+
+    Returns:
+        ChatOpenAI: The configured LM Studio model.
+    """
+    return ChatOpenAI(
+        base_url=os.getenv("MAC_LLM_PORTFORWARD"), 
+        api_key="lm-studio", 
+        name="local"
+    )
 # def create_gpt4o_model(model_name):
 #     """
 #     Creates and returns an AzureChatOpenAI model instance for GPT-4O.
@@ -121,10 +134,18 @@ def create_model(model_name):
     # else:
     #     return create_lmstudio_model(model_name)
 
+    # FOR LOCAL
+    # if model_name == "LOCAL":
+    #     return create_lmstudio_model(model_name)
+    # else:
+    #     return create_lmstudio_model(model_name)
+
+    # FOR RENDER
+
     if model_name == "LOCAL":
-        return create_lmstudio_model(model_name)
+        return create_lmstudio_model_portforward(model_name)
     else:
-        return create_lmstudio_model(model_name)
+        return create_lmstudio_model_portforward(model_name)
 
 def set_global_model(model_name):
     """
