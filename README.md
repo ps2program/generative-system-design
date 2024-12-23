@@ -1,4 +1,4 @@
-# xSystemsAI Setup Guide
+# Generative System Design Setup Guide
 
 ## Setting Up Your Environment
 
