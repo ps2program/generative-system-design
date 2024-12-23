@@ -1,0 +1,99 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "xSystemsAI documentation",
+      "version": "1.0.0",
+      "title": "xSystemsAI"
+    },
+    "host": "10.85.86.15:5050",
+    "basePath": "/",
+    "schemes": ["http"],
+    "paths": {
+      "/change_model": {
+        "post": {
+          "summary": "Change Model",
+          "description": "Endpoint to change the current model based on user selection.",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "model",
+              "description": "Model to be changed",
+              "schema": {
+                "$ref": "#/definitions/ModelChange"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Model changed successfully"
+            },
+            "400": {
+              "description": "Validation error"
+            }
+          }
+        }
+      },
+      "/predict": {
+        "post": {
+          "summary": "Predict",
+          "description": "Endpoint to handle user prediction requests.",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "message",
+              "description": "User input message",
+              "schema": {
+                "$ref": "#/definitions/Message"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Prediction successful"
+            }
+          }
+        }
+      },
+      "/clear_history": {
+        "post": {
+          "summary": "Clear History",
+          "description": "Endpoint to clear the user's chat history.",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "History cleared successfully"
+            },
+            "500": {
+              "description": "Server error"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Message": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Garage Door Opener"
+          }
+        }
+      },
+      "ModelChange": {
+        "type": "object",
+        "properties": {
+          "model_name": {
+            "type": "string",
+            "example": "GPT-4o"
+          }
+        }
+      }
+    }
+  }
+  

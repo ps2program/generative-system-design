@@ -1,0 +1,5 @@
+environments
+# REACT_APP_API_URL=http://10.85.86.15:5000/
+# REACT_APP_API_URL=http://10.35.145.61:5050/
+# portainer
+REACT_APP_API_URL=http://10.35.130.34:5050

@@ -1,0 +1,9 @@
+Flask==3.0.3
+Flask-CORS==4.0.1
+langchain_core==0.2.33
+langgraph==0.1.19
+langchain_openai==0.1.17
+python-dotenv==1.0.0
+flask_swagger_ui
+pydantic
+sqlite3

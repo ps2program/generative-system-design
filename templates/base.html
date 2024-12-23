@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot</title>
+    <script type="text/javascript">
+    window.onload = function() {
+        function loadPreferences() {
+            var savedVisibility = localStorage.getItem('chatbot_ER124837');
+            var element = document.getElementById('chatbot_button');
+
+            if (savedVisibility === 'true') {
+                element.classList.remove('hidden');
+            } else {
+                element.classList.add('hidden');
+            }
+        }
+        function captureLog(msg) {
+            // Here, you can do whatever you want with the log messages,
+            // like appending them to the DOM or sending them to a server
+            document.getElementById("logOutput").innerText += msg + "\n";
+        }
+
+        // Load preferences on page load
+        loadPreferences();
+
+        var oldLog = console.log;
+        console.log = function(message) {
+            // Do something with the log message
+            captureLog(message);
+
+            // Call the original console.log function
+            oldLog.apply(console, arguments);
+        };
+    }
+</script>
+</head>
+<body>
+<img id="bg_image" src="static/images/bg_full.png" alt="Image description" class="full-width-image">
+<div id="logOutput">
+<div class="container">
+    <div class="chatbox">
+        <div class="chatbox__support">
+            <div class="chatbox__header">
+                <div class="chatbox__image--header">
+                    <img src="../static/images/aura.png" alt="image" width="50" height="23">
+                </div>
+                <div class="chatbox__content--header">
+                    <h4 class="chatbox__heading--header">xSystems chat support</h4>
+                    <p class="chatbox__description--header">AI Assistance for system design</p>
+                </div>
+            </div>
+            <div class="chatbox__messages">
+                <div></div>
+            </div>
+              <div class="chatbox__footer">
+                <div style="display: flex; align-items: center; flex-grow: 1;">
+                  <img id="loading-gif" src="static/images/icons8-loading-infinity-static.png" style="display: block; width: 30px; height: 30px; margin-right: 0px;">
+                  <input class="chatbox__input" type="text" placeholder="Type your message..." style="
+                  padding-left: 15px;
+              ">
+                </div>
+                <button class="chatbox__send--footer send__button">Send</button>
+              </div>              
+        </div>
+        <div class="chatbox__button" id="chatbot_button">
+            <button><img src="{{ url_for('static', filename='images/chatbox-icon.png') }}" /></button>
+        </div>
+    </div>
+</div>
+
+    <script>
+        $SCRIPT_ROOT = {{ request.script_root|tojson }};
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+
+</body>
+</html>

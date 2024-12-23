@@ -1,0 +1,153 @@
+/* Full page layout for the chat application */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Dark and Light mode */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.chat-container.light {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.chat-container.dark {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+.dark-mode-toggle {
+    margin: 10px;
+    padding: 5px 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.dark-mode-toggle:hover {
+    background-color: #45a049;
+}
+
+.chat-app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: inherit; /* Matches background for dark/light mode */
+    padding: 0;
+}
+
+.chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: inherit; /* Matches background for dark/light mode */
+    margin-bottom: 10px;
+}
+
+/* Chat message styling */
+.message {
+    margin: 5px 0;
+    max-width: 80%;
+}
+
+.message.user {
+    text-align: left;
+    align-self: flex-start;
+}
+
+.message.ai {
+    text-align: right;
+    align-self: flex-end;
+}
+
+.message-content {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+.message.ai .message-content {
+    background-color: #444;
+}
+
+.message.user .message-content {
+    background-color: #005eff;
+    color: white;
+}
+
+/* Specific styling for markdown code blocks */
+.message-content code {
+    background-color: #2d2d2d; /* Dark mode background for code */
+    color: #f8f8f2; /* Light text for code */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.chat-container.light .message-content code {
+    background-color: #f0f0f0; /* Light mode background for code */
+    color: #333; /* Dark text for code */
+}
+
+/* Preformatted code block styling */
+.message-content pre {
+    background-color: #2d2d2d; /* Dark mode for preformatted blocks */
+    color: #f8f8f2;
+    border-radius: 5px;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+.chat-container.light .message-content pre {
+    background-color: #f0f0f0; /* Light mode background for preformatted blocks */
+    color: #333; /* Dark text for preformatted blocks */
+}
+
+/* Input form styling */
+.input-form {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background-color: inherit; /* Matches background in both dark/light mode */
+    position: sticky;
+    bottom: 0; /* Keep input form at the bottom */
+}
+
+.input-box {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+.input-box::placeholder {
+    color: #888;
+}
+
+.send-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.send-button:hover {
+    background-color: #45a049;
+}
