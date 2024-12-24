@@ -22,7 +22,11 @@ from database.state_memory import *
 
 
 # app = Flask(__name__)
-app = Flask(__name__, static_folder='chat-app/build/static', template_folder='chat-app/build')
+# app = Flask(__name__, static_folder='chat-app/build/static', template_folder='chat-app/build')   # for the server side chat-app UI
+
+# for generative-system-design-frontend
+app = Flask(__name__, static_folder='generative_system_design_frontend/build/static', template_folder='generative_system_design_frontend/build')
+
 CORS(app)
 
 # Initialize the default model
@@ -39,7 +43,6 @@ config = {"configurable": {"thread_id": "1"}}
 from sqlalchemy.orm import Session
 from datetime import datetime
 from database.archival_memory import Archival_Session, Archival_ChatHistory
-
 
 # Insert chat history
 def insert_chat_history(user_id, question, answer):
