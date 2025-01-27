@@ -1,0 +1,68 @@
+/* Ensure the body and html take up the full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent scrolling if overflow occurs */
+}
+
+#root {
+  height: 100%; /* React's root div needs to fill the height */
+}
+
+.chat-app {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  width: 100%;
+  max-width: 100%; /* No maximum width limit */
+  min-height: 100vh; /* Ensure the app fills the viewport height */
+  border-radius: 10px;
+  box-sizing: border-box; /* Ensure padding is accounted for in width/height */
+}
+
+/* Chat message area should grow to take up available space */
+.chat-box {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  max-height: calc(100vh - 160px); /* Prevent chat-box from growing too large */
+}
+
+/* Make sure input form is sticky at the bottom */
+.input-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 10px 0;
+  border-top: 1px solid #ccc;
+  width: 100%;
+  bottom: 0;
+}
+
+/* Input box and button should also be responsive */
+.input-box {
+  flex-grow: 1;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.send-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: #1a1414;
+}

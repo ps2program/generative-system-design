@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Physical Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #requirements-form {
+            margin-bottom: 20px;
+        }
+        #requirements-form input,
+        #requirements-form button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #requirements-list {
+            margin-top: 20px;
+        }
+        #requirements-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #requirements-list li {
+            margin-bottom: 10px;
+        }
+        #response {
+            margin-top: 20px;
+            font-size: 16px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>LLM Physical Generator</h1>
+    
+    <!-- Form to input requirements -->
+    <div id="requirements-form">
+        <button onclick="sendRequirementsToServer()">Send Requirements to Server</button>
+    </div>
+
+    <!-- Display list of requirements -->
+    <div id="requirements-list">
+        <h2>Requirements:</h2>
+        <ul id="requirementList">
+            <!-- List of requirements will be added here -->
+        </ul>
+    </div>
+
+    <!-- Response display -->
+    <div id="response"></div>
+
+    <script>
+        const requirements = [
+            {
+                "index": "1",
+                "name": "Safety Feature Requirements",
+                "description": "The garage door opener must have a safety feature to prevent the door from closing if there is an obstacle in its path or if someone is under the door."
+            },
+            {
+                "index": "2",
+                "name": "User Interface Requirements",
+                "description": "The garage door opener must have an intuitive user interface that allows users to easily open, close, and control the garage door remotely using a remote control, smartphone app, or wall switch."
+            },
+            {
+                "index": "3",
+                "name": "Durability Requirements",
+                "description": "The garage door opener must be designed to withstand harsh weather conditions, including extreme temperatures, humidity, and precipitation."
+            },
+            {
+                "index": "4",
+                "name": "Security Requirements",
+                "description": "The garage door opener must have advanced security features to prevent unauthorized access and hacking attempts, including encryption, password protection, and secure communication protocols."
+            },
+            {
+                "index": "5",
+                "name": "Energy Efficiency Requirements",
+                "description": "The garage door opener must be energy-efficient and designed to minimize energy consumption, including features such as automatic door reversal, soft start, and low-power modes."
+            },
+            {
+                "index": "6",
+                "name": "Noise Reduction Requirements",
+                "description": "The garage door opener must be designed to minimize noise levels, including features such as reduced motor noise, silent belt drive, and sound-absorbing materials."
+            },
+            {
+                "index": "7",
+                "name": "Maintenance Requirements",
+                "description": "The garage door opener must be designed for easy maintenance and repair, including features such as accessible components, clear documentation, and online support."
+            },
+            {
+                "index": "8",
+                "name": "Compatibility Requirements",
+                "description": "The garage door opener must be compatible with a wide range of garage door sizes and materials, including steel, wood, and aluminum doors."
+            },
+            {
+                "index": "9",
+                "name": "Certification Requirements",
+                "description": "The garage door opener must meet or exceed all relevant industry standards and certifications, including UL, ETL, and CE."
+            },
+            {
+                "index": "10",
+                "name": "Warranty Requirements",
+                "description": "The garage door opener must come with a comprehensive warranty that covers parts, labor, and repairs for a minimum of 5 years."
+            }
+        ];
+
+        // Function to send requirements to the Flask server
+        function sendRequirementsToServer() {
+            fetch('http://127.0.0.1:5000/process-requirements', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ requirements })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+            })
+            .catch(error => {
+                console.error('Error sending requirements:', error);
+            });
+
+            // Start listening for the physicals incrementally
+            listenForPhysicals();
+        }
+
+        // Set up the EventSource connection to listen for real-time responses
+        function listenForPhysicals() {
+            const eventSource = new EventSource("http://127.0.0.1:5000/process-requirements");
+
+            eventSource.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                const requirement = data.requirement;
+                const physicalName = data.physical_name;
+                const physicalDescription = data.description;
+
+                const responseElement = document.getElementById("response");
+
+                // Display the physical created for each requirement
+                responseElement.innerHTML += `<strong>Physical for ${requirement}:</strong> ${physicalName} - ${physicalDescription} <br/>`;
+            };
+
+            eventSource.onerror = function(error) {
+                console.error('Error in EventSource:', error);
+            };
+        }
+    </script>
+
+</body>
+</html>
