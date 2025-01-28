@@ -185,7 +185,7 @@ const LayoutFlow = () => {
   // Fetch data from the API endpoint
   const loadJsonData = useCallback(async () => {
     try {
-      const response = await axios.post("http://localhost:5050/predict", {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/predict`, {
         user_id: "default_user", // Replace with appropriate user_id if needed
         message: { question: "Electric Bike" }, 
       });
