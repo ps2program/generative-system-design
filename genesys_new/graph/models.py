@@ -46,7 +46,7 @@ def create_lmstudio_model(self):
         ChatOpenAI: The configured LM Studio model.
     """
     return ChatOpenAI(
-        base_url="http://10.85.86.15:1234/v1", api_key="lm-studio", name="local"
+        base_url="http://localhost:1234/v1", api_key="lm-studio", name="local"
     )
     
 def create_gpt4o_model(model_name):

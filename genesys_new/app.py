@@ -32,7 +32,7 @@ CORS(app)
 
 # Initialize the default model
 # set_global_model("OLLAMA_MISTRAL")
-# set_global_model("LOCAL")
+set_global_model("LOCAL")
 # set_global_model("LLAMA3")
 set_global_model("MISTRAL")
 graph = create_question_handling_graph()

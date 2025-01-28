@@ -1,5 +1,5 @@
 // import React, { useCallback, useRef, useState } from 'react';
-import  { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import ELK from 'elkjs/lib/elk.bundled.js';
 import AIAssistanceDialog from './Components/AIAssistanceDialog';
 
@@ -10,7 +10,7 @@ import '@xyflow/react/dist/style.css';
 // import jsonData from './data.js';
 // Define types for Node and Edge
 
-
+import axios from 'axios';
 
 // Define types for Node and Edge
 // type Node = {
@@ -47,7 +47,7 @@ type Edge = {
   animated: boolean;
 };
 
-const elk:any = new ELK();
+const elk: any = new ELK();
 const jsonData = [
   {
     "index": "1",
@@ -134,7 +134,7 @@ const LayoutFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogNodeId, setDialogNodeId] = useState(null);
+  const [dialogNodeId, setDialogNodeId] = useState('node-1');
   const [nodeId, setNodeId] = useState('None'); // Initial nodeId
   const { getLayoutedElements } = useLayoutedElements();
 
@@ -145,7 +145,7 @@ const LayoutFlow = () => {
     (connection) => setEdges((edges) => addEdge(connection, edges)),
     [setEdges]
   );
-console.log(dialogNodeId)
+  console.log(dialogNodeId)
 
   const onReconnect = useCallback(
     (oldEdge: Edge, newConnection: Connection) => {
@@ -227,22 +227,78 @@ console.log(dialogNodeId)
     [nodes, edges, setNodes, setEdges]
   );
 
-  const loadJsonData = useCallback(() => {
-    const newNodes = jsonData.map((item) => ({
-      id: `node-${item.index}`,
-      data: { label: item.title, description: item.description },
-      position: { x: 0, y: 0 },
-    }));
+  // Fetch data from the API endpoint
+  const loadJsonData = useCallback(async () => {
+    try {
+      const response = await axios.post("http://localhost:5050/predict", {
+        user_id: "default_user", // Replace with appropriate user_id if needed
+        message: { question: "Product for Electric" }, // Replace with appropriate message
+      });
 
-    const newEdges = jsonData.slice(1).map((item, idx) => ({
-      id: `edge-${idx + 1}`,
-      source: `node-${jsonData[idx].index}`,
-      target: `node-${item.index}`,
-    }));
+      const jsonData = JSON.parse(response.data.answer.content); // Assuming the data is in the "answer" field
+      const newNodes = jsonData.map((item, index) => ({
+        id: `node-${index + 1}`,
+        data: { label: item.title, description: item.description },
+        position: { x: 0, y: 0 },
+      }));
 
-    setNodes(newNodes);
-    setEdges(newEdges);
+      const newEdges = jsonData.slice(1).map((item, idx) => ({
+        id: `edge-${idx + 1}`,
+        source: `node-${jsonData[idx].index}`,
+        target: `node-${item.index}`,
+      }));
+
+      setNodes(newNodes);
+      setEdges(newEdges);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }, [setNodes, setEdges]);
+
+
+  // Callback to handle LLM response
+  // Callback to handle LLM response
+  const handleLLMResponse = (response: any) => {
+    if (response) {
+      // Create the "System" node as the root node only if there are no existing nodes
+      const systemNode = {
+        id: 'node-0', // Root node id
+        data: { label: 'System', description: 'The root node for all other nodes' },
+        position: { x: 150, y: 150 }, // Position it at the center or any desired position
+      };
+
+      // Check if there are already existing nodes
+      const isExistingNodes = nodes.length > 0;
+
+      // Create new nodes from the LLM response
+      const newNodes = response.map((item, index) => ({
+        id: `node-${isExistingNodes ? nodes.length + index + 1 : index + 1}`, // Node IDs starting from 1, adjust based on existing nodes
+        data: { label: item.title || `Node ${index + 1}`, description: item.description || '' },
+        position: { x: Math.random() * 300, y: Math.random() * 300 },
+      }));
+
+      // Create edges based on whether there are existing nodes or not
+      const newEdges = newNodes.map((node) => ({
+        id: `edge-${node.id}`,
+        source: isExistingNodes ? dialogNodeId : systemNode.id, // Use dialogNodeId if nodes exist, otherwise use systemNode
+        target: node.id,
+        animated: true,
+      }));
+
+      // Set the nodes and edges state
+      setNodes((nds) => [
+        ...(!isExistingNodes ? [systemNode] : []), // Add systemNode only if no nodes exist
+        ...nds,
+        ...newNodes,
+      ]);
+      setEdges((eds) => [...eds, ...newEdges]); // Add the edges connecting dialogNodeId or systemNode to new nodes
+    }
+
+    // Close the dialog after processing the LLM response
+    setIsDialogOpen(false);
+  };
+
+
 
   return (
     <ReactFlow
@@ -371,12 +427,14 @@ console.log(dialogNodeId)
           <ChatIcon fontSize="large" />
         </IconButton>
 
-        {/* AI Assistance Dialog */}
         <AIAssistanceDialog
           isOpen={isDialogOpen}
           nodeId={nodeId} // Passing nodeId as a prop
           onClose={() => setIsDialogOpen(false)} // Close the dialog when the user clicks outside or closes it
+          onLLMResponse={handleLLMResponse} // Passing handleLLMResponse as the onLLMResponse prop
         />
+
+
       </Panel>
 
       <Controls position="bottom-left" >
