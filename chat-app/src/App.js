@@ -9,7 +9,8 @@ function App() {
   const [error, setError] = useState(null);
   const userId = "default_user"; // Replace with dynamic user ID if applicable
 
-  const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:5055";
+  // const apiUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:5055";
+  const apiUrl = process.env.REACT_APP_API_URL || "https://generative-system-design.onrender.com";
 
   const fetchHistory = async () => {
     try {
